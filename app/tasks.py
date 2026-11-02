@@ -1,6 +1,6 @@
 import base64
 import os
-
+import time
 from celery.signals import worker_process_init
 
 from app.celery_app import celery_app
@@ -24,5 +24,6 @@ def add(x, y):
 @celery_app.task(name="infrascan.inference")
 def inference_worker(weight_path, image_b64, filename=None):
     image_bytes = base64.b64decode(image_b64)
+    time.sleep(4)
     result = inference_service(weight_path, image_bytes, filename=filename)
     return {"status": "completed", "result": result}
